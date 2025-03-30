@@ -1,94 +1,79 @@
 <!DOCTYPE html>
 <html>
-<style> 
-
-body{
-background-color:white; 
-color: white;
-background-image: url('tech.jpg');
-background-repeat: no-repeat;
-background-size: cover;
-
+<style>
+@keyframes backgroundAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-</style>
+body {
+  background-color: black;
+  color: white;
+  background-image: url('tech.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: backgroundAnimation 10s infinite alternate;
+}
 
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+input:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #00ff00;
+  outline: none;
+  transform: scale(1.1);
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #91a0b1;
+  transform: scale(1.1);
+}
+
+div {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
 <body>
-<p> 
-<input id='first' required> First String </input> 
+<p>
+  <input id="first" required placeholder="Enter the first string">
 </p>
 <p>
-<input id='second' required> Second String </input>
+  <input id="second" required placeholder="Enter the second string">
 </p>
-<button onclick='compare()'> COMPARE </button>
-<div id='matching'> Match Percentage is </div>
-<div id='match'> </div> 
-<div id='matcher'> </div> 
-<div id='matchers'> </div> 
-
+<button onclick="compare()">COMPARE</button>
+<div id="matching">Match Percentage is</div>
+<div id="match"></div>
+<div id="matcher"></div>
+<div id="matchers"></div>
 </body>
-<script src='similaritys.js'> </script>
-<script>
-function similarity(s1, s2) {
-  var longer = s1;
-  var shorter = s2;
-  if (s1.length < s2.length) {
-    longer = s2;
-    shorter = s1;
-  }
-  var longerLength = longer.length;
-  if (longerLength == 0) {
-    return 1.0;
-  }
-  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
-}
-
-
-function editDistance(s1, s2) {
-  s1 = s1.toLowerCase();
-  s2 = s2.toLowerCase();
-
-  var costs = new Array();
-  for (var i = 0; i <= s1.length; i++) {
-    var lastValue = i;
-    for (var j = 0; j <= s2.length; j++) {
-      if (i == 0)
-        costs[j] = j;
-      else {
-        if (j > 0) {
-          var newValue = costs[j - 1];
-          if (s1.charAt(i - 1) != s2.charAt(j - 1))
-            newValue = Math.min(Math.min(newValue, lastValue),
-              costs[j]) + 1;
-          costs[j - 1] = lastValue;
-          lastValue = newValue;
-        }
-      }
-    }
-    if (i > 0)
-      costs[s2.length] = lastValue;
-  }
-  return costs[s2.length];
-}
-
-function compare(){
-first = document.getElementById('first').value
-second = document.getElementById('second').value
-matcher = similarity(first, second)*100
-console.log(matcher);
-
-document.getElementById('matching').innerHTML = 'Match Percentage of '+first+' and '+second+ ' is ';
-document.getElementById('match').innerHTML = matcher.toFixed(2).toString()+"%,  using Levenshtein Distance";
-
-matcher2 = stringSimilarity.compareTwoStrings(first,second)*100
-console.log(matcher2);
-document.getElementById('matcher').innerHTML = matcher2.toFixed(2).toString()+"%,  using Dice's Coefficient";
-
-matcher3 = (matcher+matcher2)/2
-console.log(matcher3);
-document.getElementById('matchers').innerHTML = "Mean Percentage is "+matcher3.toFixed(2).toString()+"%";
-}
-
-
-</script>
+<script src="similaritys.js"></script>
+<script src="string_match.js"></script>
 </html>
